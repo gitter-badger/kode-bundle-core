@@ -1,0 +1,50 @@
+{
+    "name": "kode-cms/kode-bundle",
+    "description": "Symfony 4 Utils",
+    "version": "0.0.1-dev",
+    "type": "symfony-bundle",
+    "keywords": [
+        "kode-cms",
+        "symfony",
+        "util"
+    ],
+    "homepage": "https://github.com/k0d3r1s/kode-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "k0d3r1s",
+            "homepage": "https://github.com/k0d3r1s",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/k0d3r1s/kode-bundle/issues"
+    },
+    "require": {
+        "php": ">=7.2.0",
+        "doctrine/dbal": "*",
+        "doctrine/common": "*",
+        "doctrine/orm": "*",
+        "predis/predis": "*",
+        "psr/http-message": "^1.0",
+        "psr/log": "^1.0",
+        "snc/redis-bundle": "*",
+        "symfony/symfony": "*",
+        "twig/twig": "*",
+    },
+    "autoload": {
+        "psr-4": {
+            "KodeCms\\KodeBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "KodeCms\\KodeBundle\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}
