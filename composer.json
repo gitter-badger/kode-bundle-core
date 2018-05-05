@@ -30,7 +30,7 @@
         "psr/log": "^1.0",
         "snc/redis-bundle": "*",
         "symfony/symfony": "*",
-        "twig/twig": "*",
+        "twig/twig": "*"
     },
     "autoload": {
         "psr-4": {
