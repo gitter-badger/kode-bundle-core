@@ -13,22 +13,22 @@ class Helper
         $bar = $tmp;
     }
 
-    private static function checkHttps(Request $request)
+    protected static function checkHttps(Request $request)
     {
         return $request->server->has('HTTPS') && 'on' === $request->server->get('HTTPS');
     }
 
-    private static function checkServerPort(Request $request)
+    protected static function checkServerPort(Request $request)
     {
         return $request->server->has('SERVER_PORT') && 443 === (int)$request->server->get('SERVER_PORT');
     }
 
-    private static function checkHttpXForwardedSsl(Request $request)
+    protected static function checkHttpXForwardedSsl(Request $request)
     {
         return $request->server->has('HTTP_X_FORWARDED_SSL') && 'on' === $request->server->get('HTTP_X_FORWARDED_SSL');
     }
 
-    private static function checkHttpXForwardedProto(Request $request)
+    protected static function checkHttpXForwardedProto(Request $request)
     {
         return $request->server->has('HTTP_X_FORWARDED_PROTO') && 'https' === $request->server->get('HTTP_X_FORWARDED_PROTO');
     }
