@@ -9,7 +9,7 @@ trait TwigTrait
     public function makeArray(array $input, $type = 'filter')
     {
         $output = [];
-        $class = '\\Twig_Simple'.ucfirst($type);
+        $class = \sprintf('\\Twig_Simple', ucfirst($type));
         $this->makeInput($input, $input);
 
         foreach ($input as $call => $function) {
@@ -32,7 +32,7 @@ trait TwigTrait
             if ($this->shortFunctions) {
                 $output[$call] = $function;
             }
-            $output['kode_'.$call] = $function;
+            $output[\sprintf('kode_%s', $call)] = $function;
         }
     }
 }

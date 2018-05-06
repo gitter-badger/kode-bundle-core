@@ -32,15 +32,15 @@ class KodeCmsKodeExtension extends Extension
         foreach ($config['extensions'] as $key => $extension) {
             /** @var $extension array */
             foreach ($extension as $variable => $value) {
-                if ($value === reset($extension)) {
-                    $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../'.ucfirst($key).'/Resources/config'));
+                if ($value === \reset($extension)) {
+                    $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
                     foreach (self::FILES as $file) {
-                        if (file_exists(__DIR__.'/../'.ucfirst($key).'/Resources/config/'.$file)) {
+                        if (\file_exists(\sprintf('%s/../%s/Resources/config/%s', __DIR__, \ucfirst($key), $file))) {
                             $loader->load($file);
                         }
                     }
                 }
-                $container->setParameter($this->getAlias().'.'.$key.'.'.$variable, $value);
+                $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
         }
     }
@@ -60,9 +60,9 @@ class KodeCmsKodeExtension extends Extension
         /** @var $config array[] */
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../Resources/config', __DIR__)));
         foreach (self::FILES as $file) {
-            if (\file_exists(__DIR__.'/../Resources/config/'.$file)) {
+            if (\file_exists(\sprintf('%s/../Resources/config/%s', __DIR__, $file))) {
                 $loader->load($file);
             }
         }

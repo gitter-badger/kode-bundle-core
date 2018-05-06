@@ -31,10 +31,6 @@ class Helper
 
     public static function getSchema(Request $request)
     {
-        if (self::useHttps($request)) {
-            return 'https://';
-        }
-
-        return 'http://';
+        return self::useHttps($request) ? 'https://' : 'http://';
     }
 }
