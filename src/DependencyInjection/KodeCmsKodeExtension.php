@@ -34,7 +34,7 @@ class KodeCmsKodeExtension extends Extension
             foreach ($extension as $variable => $value) {
                 if ($value === reset($extension)) {
                     $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../'.ucfirst($key).'/Resources/config'));
-                    foreach (self::$files as $file) {
+                    foreach (self::FILES as $file) {
                         if (file_exists(__DIR__.'/../'.ucfirst($key).'/Resources/config/'.$file)) {
                             $loader->load($file);
                         }
