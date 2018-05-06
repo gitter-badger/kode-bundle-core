@@ -30,13 +30,13 @@ class Text
     ];
     // @formatter:on
 
-    public static function toCamelCase($string, $upFirst = true)
+    public static function toCamelCase($string, $lowFirst = true)
     {
-        if ($upFirst) {
-            return \preg_replace('~\s+~', '', \lcfirst(\ucwords(\str_replace('_', ' ', $string))));
+        if ($lowFirst) {
+            return \preg_replace('~\s+~', '', \lcfirst(\ucwords(\strtolower((\str_replace('_', ' ', $string))))));
         }
 
-        return \preg_replace('~\s+~', '', \ucwords(\str_replace('_', ' ', $string)));
+        return \preg_replace('~\s+~', '', \ucwords(\strtolower((\str_replace('_', ' ', $string)))));
     }
 
     public static function fromCamelCase($string, $separator = '_')

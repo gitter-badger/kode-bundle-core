@@ -14,7 +14,7 @@ trait TwigTrait
 
         foreach ($input as $call => $function) {
             if (\is_array($function)) {
-                $options = isset($function[2]) ? $function[2] : [];
+                $options = $function[2] ?? [];
                 unset($function[2]);
                 $output[] = new $class($call, $function, $options);
             } else {
