@@ -21,7 +21,7 @@
         "issues": "https://github.com/k0d3r1s/kode-bundle/issues"
     },
     "require": {
-        "php": ">=7.2.0",
+        "php": ">=7.1.0",
         "doctrine/dbal": "*",
         "doctrine/common": "*",
         "doctrine/orm": "*",
