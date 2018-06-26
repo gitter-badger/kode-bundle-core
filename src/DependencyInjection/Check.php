@@ -23,17 +23,7 @@ class Check implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root($this->alias);
-
-        // @formatter:off
-        $rootNode
-            ->children()
-                ->arrayNode('extensions')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                    ->end()
-                ->end()
-            ->end();
-        // @formatter:on
+        $rootNode->children()->end();
 
         return $treeBuilder;
     }

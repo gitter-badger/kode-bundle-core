@@ -27,45 +27,15 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root($this->alias);
+        $rootNode->children();
 
-        // @formatter:off
-        $rootNode
-            ->children()
-                ->append($this->parseExtensions())
-            ->end();
-        // @formatter:on
-
-        return $treeBuilder;
-    }
-
-    private function parseExtensions(): ArrayNodeDefinition
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('extensions');
-
-        foreach($this->extensions as $extension){
-            // @formatter:off
-            $node
-                ->children()
-                    ->arrayNode($extension)
-                        ->addDefaultsIfNotSet()
-                        ->canBeEnabled()
-                        ->children()
-                            ->append($this->getExtensionDefinition($extension))
-                        ->end()
-                    ->end()
-                ->end();
-            // @formatter:on
+        foreach ($this->extensions as $extension) {
+            $class = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Definition', ucfirst(KodeCmsKodeExtension::EXT[$extension]));
+            $rootNode->append((new $class())->getExtensionDefinition($extension));
         }
 
-        return $node;
-    }
+        $rootNode->end();
 
-    private function getExtensionDefinition($extension): ArrayNodeDefinition
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root($extension);
-
-        return $node;
+        return $treeBuilder;
     }
 }

@@ -14,11 +14,8 @@ if (!\defined('KODE')) {
 
 class KodeCmsKodeExtension extends Extension
 {
-    private const FILES = [
-        'parameters.yaml',
-        'services.yaml',
-    ];
-    private const EXT = [
+    private const FILES = ['parameters.yaml', 'services.yaml',];
+    public const EXT = [
         'translatable' => 'translatable',
         'captcha' => 'captcha',
         'guzzle' => 'guzzle',
@@ -27,10 +24,10 @@ class KodeCmsKodeExtension extends Extension
         'oauth' => 'oauth',
         'openid' => 'oauth',
         'openidconnect' => 'oauth',
-        'pagination' => 'pagination',
+        'pagination' => 'position',
         'position' => 'position',
         'sitemap' => 'sitemap',
-        'script' => 'core',
+        'core' => 'core',
     ];
 
     public function getAlias()
@@ -46,7 +43,7 @@ class KodeCmsKodeExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->loadConfig($configs, $container);
-        foreach ($config['extensions'] as $key => $extension) {
+        foreach ($config as $key => $extension) {
             /** @var $extension array */
             foreach ($extension as $variable => $value) {
                 if ($value === \reset($extension)) {
@@ -76,8 +73,8 @@ class KodeCmsKodeExtension extends Extension
     {
         $extensions = [];
         $patterns = [
-            \sprintf('/Unrecognized options "(.*?)" under "%s.extensions"/', $this->getAlias()),
-            \sprintf('/Unrecognized option "(.*?)" under "%s.extensions"/', $this->getAlias()),
+            \sprintf('/Unrecognized options "(.*?)" under "%s"/', $this->getAlias()),
+            \sprintf('/Unrecognized option "(.*?)" under "%s"/', $this->getAlias()),
         ];
         try {
             $configuration = new Check($this->getAlias());
@@ -111,7 +108,7 @@ class KodeCmsKodeExtension extends Extension
         $extensions = [];
         $defined = $this->getExtensions($configs);
         foreach ($defined as $def) {
-            if (is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, $def))) {
+            if (is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, self::EXT[$def]))) {
                 $extensions[] = $def;
             }
         }
@@ -132,7 +129,9 @@ class KodeCmsKodeExtension extends Extension
         }
 
         $container->setParameter('kode_alias', $this->getAlias());
-        $this->unsetExtension($config['extensions']);
+        if (!empty($config)) {
+            $this->unsetExtension($config);
+        }
 
         return $config;
     }
