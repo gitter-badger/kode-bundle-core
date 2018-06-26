@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Command
 {
-    public static function initialize(array $arguments, ContainerAwareCommand $command)
+    public static function initialize(array $arguments, ContainerAwareCommand $command): bool
     {
         [$params, $input, $output] = $arguments;
         /** @var InputInterface $input */

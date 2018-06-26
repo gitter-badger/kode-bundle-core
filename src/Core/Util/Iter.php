@@ -2,9 +2,9 @@
 
 namespace KodeCms\KodeBundle\Core\Util;
 
-class Iterable
+class Iter
 {
-    public static function isEmpty($variable)
+    public static function isEmpty($variable): bool
     {
         $result = true;
 
@@ -19,12 +19,12 @@ class Iterable
         return $result;
     }
 
-    public static function removeDuplicates(&$array)
+    public static function removeDuplicates(&$array): void
     {
         $array = \array_map('unserialize', \array_unique(\array_map('serialize', $array)));
     }
 
-    public static function multiple(array $keys)
+    public static function multiple(array $keys): bool
     {
         foreach ($keys as $key) {
             if (!\is_array($key)) {
@@ -35,7 +35,7 @@ class Iterable
         return true;
     }
 
-    public static function multiset(array $keys)
+    public static function multiset(array $keys): bool
     {
         foreach ($keys as $key) {
             if ($key === null) {
@@ -45,6 +45,4 @@ class Iterable
 
         return true;
     }
-
-
 }

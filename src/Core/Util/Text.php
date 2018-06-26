@@ -30,26 +30,26 @@ class Text
     ];
     // @formatter:on
 
-    public static function toCamelCase($string, $lowFirst = true)
+    public static function toCamelCase($string, $lowFirst = true): string
     {
         if ($lowFirst) {
             return \preg_replace('~\s+~', '', \lcfirst(\ucwords(\strtolower((\str_replace('_', ' ', $string))))));
         }
 
-        return \preg_replace('~\s+~', '', \ucwords(\strtolower((\str_replace('_', ' ', $string)))));
+        return \preg_replace('~\s+~', '', \ucwords(\strtolower(\str_replace('_', ' ', $string))));
     }
 
-    public static function fromCamelCase($string, $separator = '_')
+    public static function fromCamelCase($string, $separator = '_'): string
     {
         return \strtolower(\preg_replace('/(?!^)[[:upper:]]+/', $separator.'$0', $string));
     }
 
-    public static function cleanText($text)
+    public static function cleanText($text): string
     {
         return \html_entity_decode(self::oneSpace(\str_replace(' ?', '', \mb_convert_encoding(\strip_tags($text), 'UTF-8', 'UTF-8'))));
     }
 
-    public static function oneSpace($text)
+    public static function oneSpace($text): string
     {
         return \preg_replace('/\s+/S', ' ', $text);
     }
@@ -61,7 +61,7 @@ class Text
      *
      * @return string latin text
      */
-    public static function translit2($text)
+    public static function translit2($text): string
     {
         return \str_replace(self::CYRMAP, self::LATMAP, $text);
     }
@@ -73,7 +73,7 @@ class Text
      *
      * @return string cyrillic text
      */
-    public static function translit4($text)
+    public static function translit4($text): string
     {
         return \str_replace(self::LATMAP, self::CYRMAP, $text);
     }

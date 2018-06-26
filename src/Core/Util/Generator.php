@@ -4,17 +4,17 @@ namespace KodeCms\KodeBundle\Core\Util;
 
 class Generator
 {
-    const PASS_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz';
-    const PASS_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const PASS_DIGITS = '0123456789';
-    const PASS_SYMBOLS = '!@#$%^&*()_-=+;:.,?';
+    public const PASS_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz';
+    public const PASS_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const PASS_DIGITS = '0123456789';
+    public const PASS_SYMBOLS = '!@#$%^&*()_-=+;:.,?';
 
-    const RAND_BASIC = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const RAND_EXTENDED = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-=+;:,.?';
+    public const RAND_BASIC = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const RAND_EXTENDED = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-=+;:,.?';
 
     private $sets = [];
 
-    public function generate($length = 20)
+    public function generate($length = 20): string
     {
         $all = '';
         $password = '';
@@ -42,40 +42,40 @@ class Generator
         return \array_rand($array);
     }
 
-    public function useLower()
+    public function useLower(): Generator
     {
         $this->sets['lower'] = self::PASS_LOWERCASE;
 
         return $this;
     }
 
-    public function useUpper()
+    public function useUpper(): Generator
     {
         $this->sets['upper'] = self::PASS_UPPERCASE;
 
         return $this;
     }
 
-    public function useDigits()
+    public function useDigits(): Generator
     {
         $this->sets['digits'] = self::PASS_DIGITS;
 
         return $this;
     }
 
-    public function useSymbols()
+    public function useSymbols(): Generator
     {
         $this->sets['symbols'] = self::PASS_SYMBOLS;
 
         return $this;
     }
 
-    public static function getRandomString($length = 20, $chars = self::RAND_BASIC)
+    public static function getRandomString($length = 20, $chars = self::RAND_BASIC): string
     {
         return \substr(\str_shuffle(\str_repeat($chars, (int)\ceil((int)($length / \strlen($chars))))), 1, $length);
     }
 
-    public static function getUniqueId($length = 20)
+    public static function getUniqueId($length = 20): string
     {
         try {
             return \bin2hex(random_bytes($length));

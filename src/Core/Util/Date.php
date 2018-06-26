@@ -6,7 +6,7 @@ class Date
 {
     public const FORMAT = 'd-m-Y H:i:s';
 
-    public static function validatePersonCode($personCode)
+    public static function validatePersonCode($personCode): bool
     {
         $personCode = \str_replace('-', '', $personCode);
         $result = true;
@@ -20,7 +20,7 @@ class Date
         return $result;
     }
 
-    public static function validateDate($date)
+    public static function validateDate($date): bool
     {
         $date = \str_replace('-', '', $date);
         $day = (int)\substr($date, 0, 2);
@@ -39,7 +39,7 @@ class Date
         return $day > 0 && $day <= $months[$month - 1];
     }
 
-    public static function validateDate2($date, $format = self::FORMAT)
+    public static function validateDate2($date, $format = self::FORMAT): bool
     {
         $object = \DateTime::createFromFormat($format, $date);
 
@@ -60,7 +60,7 @@ class Date
         return $timestamp;
     }
 
-    public static function newPKValidate($personCode)
+    public static function newPKValidate($personCode): bool
     {
         $personCode = \str_replace('-', '', $personCode);
 
