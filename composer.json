@@ -1,5 +1,5 @@
 {
-    "name": "kode-cms/kode-bundle",
+    "name": "kode-cms/kode-bundle-core",
     "description": "Symfony 4 Utils",
     "version": "0.0.1-dev",
     "type": "symfony-bundle",
@@ -8,7 +8,7 @@
         "symfony",
         "util"
     ],
-    "homepage": "https://github.com/k0d3r1s/kode-bundle",
+    "homepage": "https://github.com/k0d3r1s/kode-bundle-core",
     "license": "MIT",
     "authors": [
         {
@@ -18,7 +18,7 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/k0d3r1s/kode-bundle/issues"
+        "issues": "https://github.com/k0d3r1s/kode-bundle-core/issues"
     },
     "require": {
         "php": ">=7.1.0",

@@ -2,25 +2,21 @@
 
 namespace KodeCms\KodeBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements ConfigurationInterface
+class Check implements ConfigurationInterface
 {
     protected $alias;
-
-    protected $extensions;
 
     /**
      * Configuration constructor.
      *
      * @param $alias
      */
-    public function __construct($alias, $extensions)
+    public function __construct($alias)
     {
         $this->alias = $alias;
-        $this->extensions = $extensions;
     }
 
     public function getConfigTreeBuilder()
@@ -34,17 +30,11 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('extensions')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->append($this->parseExtensions())
                     ->end()
                 ->end()
             ->end();
         // @formatter:on
 
         return $treeBuilder;
-    }
-
-    private function parseExtensions(): ArrayNodeDefinition
-    {
-
     }
 }

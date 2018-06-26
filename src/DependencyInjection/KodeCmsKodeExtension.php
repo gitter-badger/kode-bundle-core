@@ -13,7 +13,25 @@ if (!\defined('KODE')) {
 
 class KodeCmsKodeExtension extends Extension
 {
-    private const FILES = ['components.yaml', 'parameters.yaml', 'services.yaml',];
+    private const FILES = [
+        'components.yaml',
+        'parameters.yaml',
+        'services.yaml',
+    ];
+    private const EXT = [
+        'translatable' => 'translatable',
+        'captcha' => 'captcha',
+        'guzzle' => 'guzzle',
+        'lexik' => 'translatable',
+        'mobile' => 'extension',
+        'oauth' => 'oauth',
+        'openid' => 'oauth',
+        'openidconnect' => 'oauth',
+        'pagination' => 'pagination',
+        'position' => 'position',
+        'sitemap' => 'sitemap',
+        'script' => 'core'
+    ];
 
     public function getAlias()
     {
@@ -27,22 +45,25 @@ class KodeCmsKodeExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $defined = $this->getExtensions($configs);
         $config = $this->loadConfig($configs, $container);
-
         foreach ($config['extensions'] as $key => $extension) {
             /** @var $extension array */
             foreach ($extension as $variable => $value) {
                 if ($value === \reset($extension)) {
                     $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
                     foreach (self::FILES as $file) {
-                        if (\file_exists(\sprintf('%s/../%s/Resources/config/%s', __DIR__, \ucfirst($key), $file))) {
-                            $loader->load($file);
+                        $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s', __DIR__, self::EXT[$key], $file);
+                        if (\file_exists($location)) {
+                            $loader->load($location);
                         }
                     }
                 }
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
         }
+
+        exit;
     }
 
     private function unsetExtension(array &$extensions = [])
@@ -52,6 +73,33 @@ class KodeCmsKodeExtension extends Extension
                 unset($extensions[$key]);
             }
         }
+    }
+
+    private function getExtensions(array $configs)
+    {
+        $extensions = [];
+        $patterns = [
+            \sprintf('/Unrecognized options "(.*?)" under "%s.extensions"/', $this->getAlias()),
+            \sprintf('/Unrecognized option "(.*?)" under "%s.extensions"/', $this->getAlias()),
+        ];
+        try {
+            $configuration = new Check($this->getAlias());
+            /** @var $config array[] */
+            $this->processConfiguration($configuration, $configs);
+        } catch (\Exception $e) {
+            foreach ($patterns as $pattern) {
+                if (\preg_match($pattern, $e->getMessage(), $matches) === 1) {
+                    $extensions = explode(',', $matches[1]);
+                    foreach ($extensions as &$extension) {
+                        $extension = trim($extension);
+                    }
+                    unset($extension);
+                    break;
+                }
+            }
+        }
+
+        return $extensions;
     }
 
     private function loadConfig(array $configs, ContainerBuilder $container)
