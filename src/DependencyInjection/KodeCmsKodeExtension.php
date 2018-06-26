@@ -15,7 +15,6 @@ if (!\defined('KODE')) {
 class KodeCmsKodeExtension extends Extension
 {
     private const FILES = [
-        'components.yaml',
         'parameters.yaml',
         'services.yaml',
     ];
@@ -62,8 +61,6 @@ class KodeCmsKodeExtension extends Extension
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
         }
-
-        exit;
     }
 
     private function unsetExtension(array &$extensions = [])
