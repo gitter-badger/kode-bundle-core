@@ -2,6 +2,7 @@
 
 namespace KodeCms\KodeBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -30,7 +31,7 @@ class KodeCmsKodeExtension extends Extension
         'pagination' => 'pagination',
         'position' => 'position',
         'sitemap' => 'sitemap',
-        'script' => 'core'
+        'script' => 'core',
     ];
 
     public function getAlias()
@@ -45,7 +46,6 @@ class KodeCmsKodeExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $defined = $this->getExtensions($configs);
         $config = $this->loadConfig($configs, $container);
         foreach ($config['extensions'] as $key => $extension) {
             /** @var $extension array */
@@ -102,9 +102,28 @@ class KodeCmsKodeExtension extends Extension
         return $extensions;
     }
 
+    /**
+     * @param array            $configs
+     * @param ContainerBuilder $container
+     *
+     * @return array[]
+     * @throws \Exception
+     */
     private function loadConfig(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration($this->getAlias());
+        $extensions = [];
+        $defined = $this->getExtensions($configs);
+        foreach ($defined as $def) {
+            if (is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, $def))) {
+                $extensions[] = $def;
+            }
+        }
+        if ($extensions !== $defined) {
+            $diff = \array_diff($defined, $extensions);
+            throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', count($diff) > 1 ? 's' : '', implode(', ', $diff)));
+        }
+
+        $configuration = new Configuration($this->getAlias(), $extensions);
         /** @var $config array[] */
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -115,7 +134,7 @@ class KodeCmsKodeExtension extends Extension
             }
         }
 
-        $container->setParameter('kode_alias', KODE);
+        $container->setParameter('kode_alias', $this->getAlias());
         $this->unsetExtension($config['extensions']);
 
         return $config;
