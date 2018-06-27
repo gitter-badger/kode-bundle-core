@@ -1,6 +1,6 @@
 {
     "name": "kode-cms/kode-bundle-core",
-    "description": "Symfony 4 Utils",
+    "description": "Symfony 4 Utils: Core library",
     "version": "0.0.1-dev",
     "type": "symfony-bundle",
     "keywords": [
