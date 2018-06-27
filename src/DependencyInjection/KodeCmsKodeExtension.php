@@ -25,7 +25,7 @@ class KodeCmsKodeExtension extends Extension
         'captcha' => 'captcha',
         'guzzle' => 'guzzle',
         'lexik' => 'translatable',
-        'mobile' => 'extension',
+        'mobile' => 'core',
         'oauth' => 'oauth',
         'openid' => 'oauth',
         'openidconnect' => 'oauth',
@@ -62,8 +62,6 @@ class KodeCmsKodeExtension extends Extension
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
         }
-
-        \dump($container);exit;
     }
 
     private function unsetExtension(array &$extensions = []): void
@@ -131,14 +129,6 @@ class KodeCmsKodeExtension extends Extension
         /** @var $config array[] */
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../Resources/config', __DIR__)));
-        foreach (self::FILES as $file) {
-            if (\file_exists(\sprintf('%s/../Resources/config/%s', __DIR__, $file))) {
-                $loader->load($file);
-            }
-        }
-
-        $container->setParameter('kode_alias', $this->getAlias());
         if (!empty($config)) {
             $this->unsetExtension($config);
         }

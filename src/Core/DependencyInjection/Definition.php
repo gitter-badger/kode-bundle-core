@@ -10,6 +10,16 @@ class Definition implements Definable
 {
     public function getExtensionDefinition($extension): ArrayNodeDefinition
     {
+        switch ($extension) {
+            case 'core':
+                return $this->getCoreDefinition($extension);
+            case 'mobile':
+                return $this->getMobilDefinition($extension);
+        }
+    }
+
+    private function getCoreDefinition($extension): ArrayNodeDefinition
+    {
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root($extension);
 
@@ -21,6 +31,24 @@ class Definition implements Definable
                 ->booleanNode('short_functions')
                     ->defaultValue(false)
                 ->end()
+            ->end();
+
+        // @formatter:on
+
+        return $node;
+    }
+
+    private function getMobilDefinition($extension): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root($extension);
+
+        // @formatter:off
+        $node
+            ->canBeEnabled()
+            ->addDefaultsIfNotSet()
+            ->children()
+
             ->end();
 
         // @formatter:on
