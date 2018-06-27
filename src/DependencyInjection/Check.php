@@ -19,7 +19,7 @@ class Check implements ConfigurationInterface
         $this->alias = $alias;
     }
 
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root($this->alias);

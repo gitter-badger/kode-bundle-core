@@ -2,10 +2,11 @@
 
 namespace KodeCms\KodeBundle\Core\DependencyInjection;
 
+use KodeCms\KodeBundle\DependencyInjection\Definable;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-class Definition
+class Definition implements Definable
 {
     public function getExtensionDefinition($extension): ArrayNodeDefinition
     {
@@ -14,7 +15,7 @@ class Definition
 
         // @formatter:off
         $node
-            ->canBeEnabled()
+            ->canBeDisabled()
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('short_functions')

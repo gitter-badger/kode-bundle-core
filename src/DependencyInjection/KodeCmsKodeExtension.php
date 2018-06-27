@@ -7,6 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Exception;
 
 if (!\defined('KODE')) {
     \define('KODE', 'kode_cms_kode');
@@ -14,7 +15,11 @@ if (!\defined('KODE')) {
 
 class KodeCmsKodeExtension extends Extension
 {
-    private const FILES = ['parameters.yaml', 'services.yaml',];
+    private const FILES = [
+        'parameters.yaml',
+        'services.yaml',
+    ];
+
     public const EXT = [
         'translatable' => 'translatable',
         'captcha' => 'captcha',
@@ -30,7 +35,7 @@ class KodeCmsKodeExtension extends Extension
         'core' => 'core',
     ];
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return KODE;
     }
@@ -38,18 +43,17 @@ class KodeCmsKodeExtension extends Extension
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->loadConfig($configs, $container);
-        foreach ($config as $key => $extension) {
+        foreach ($this->loadConfig($configs, $container) as $key => $extension) {
             /** @var $extension array */
             foreach ($extension as $variable => $value) {
                 if ($value === \reset($extension)) {
                     $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
                     foreach (self::FILES as $file) {
-                        $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s', __DIR__, self::EXT[$key], $file);
+                        $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
                         if (\file_exists($location)) {
                             $loader->load($location);
                         }
@@ -58,9 +62,11 @@ class KodeCmsKodeExtension extends Extension
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
         }
+
+        \dump($container);exit;
     }
 
-    private function unsetExtension(array &$extensions = [])
+    private function unsetExtension(array &$extensions = []): void
     {
         foreach ($extensions as $key => $extension) {
             if (empty($extension['enabled'])) {
@@ -69,7 +75,7 @@ class KodeCmsKodeExtension extends Extension
         }
     }
 
-    private function getExtensions(array $configs)
+    private function getExtensions(array $configs): array
     {
         $extensions = [];
         $patterns = [
@@ -80,7 +86,7 @@ class KodeCmsKodeExtension extends Extension
             $configuration = new Check($this->getAlias());
             /** @var $config array[] */
             $this->processConfiguration($configuration, $configs);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             foreach ($patterns as $pattern) {
                 if (\preg_match($pattern, $e->getMessage(), $matches) === 1) {
                     $extensions = explode(',', $matches[1]);
@@ -101,9 +107,9 @@ class KodeCmsKodeExtension extends Extension
      * @param ContainerBuilder $container
      *
      * @return array[]
-     * @throws \Exception
+     * @throws Exception
      */
-    private function loadConfig(array $configs, ContainerBuilder $container)
+    private function loadConfig(array $configs, ContainerBuilder $container): array
     {
         $extensions = [];
         $defined = $this->getExtensions($configs);
@@ -115,6 +121,10 @@ class KodeCmsKodeExtension extends Extension
         if ($extensions !== $defined) {
             $diff = \array_diff($defined, $extensions);
             throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', count($diff) > 1 ? 's' : '', implode(', ', $diff)));
+        }
+
+        if (!isset($extensions['core'])) {
+            $extensions[] = 'core';
         }
 
         $configuration = new Configuration($this->getAlias(), $extensions);
@@ -133,6 +143,6 @@ class KodeCmsKodeExtension extends Extension
             $this->unsetExtension($config);
         }
 
-        return $config;
+        return $config ?? [];
     }
 }

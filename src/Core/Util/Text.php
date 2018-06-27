@@ -33,7 +33,7 @@ class Text
     public static function toCamelCase($string, $lowFirst = true): string
     {
         if ($lowFirst) {
-            return \preg_replace('~\s+~', '', \lcfirst(\ucwords(\strtolower((\str_replace('_', ' ', $string))))));
+            return \preg_replace('~\s+~', '', \lcfirst(\ucwords(\strtolower(\str_replace('_', ' ', $string)))));
         }
 
         return \preg_replace('~\s+~', '', \ucwords(\strtolower(\str_replace('_', ' ', $string))));

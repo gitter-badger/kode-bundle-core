@@ -6,10 +6,10 @@ trait TwigTrait
 {
     private $shortFunctions;
 
-    public function makeArray(array $input, $type = 'filter')
+    public function makeArray(array $input, $type = 'filter'): array
     {
         $output = [];
-        $class = \sprintf('\\Twig_Simple', ucfirst($type));
+        $class = \sprintf('\\Twig_Simple%s', ucfirst($type));
         $this->makeInput($input, $input);
 
         foreach ($input as $call => $function) {
@@ -25,7 +25,7 @@ trait TwigTrait
         return $output;
     }
 
-    private function makeInput(array $input, &$output)
+    private function makeInput(array $input, &$output): void
     {
         $output = [];
         foreach ($input as $call => $function) {
