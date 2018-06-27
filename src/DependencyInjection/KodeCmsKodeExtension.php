@@ -107,7 +107,7 @@ class KodeCmsKodeExtension extends Extension
      * @return array[]
      * @throws Exception
      */
-    private function loadConfig(array $configs, ContainerBuilder $container): array
+    private function loadConfig(array $configs): array
     {
         $extensions = [];
         $defined = $this->getExtensions($configs);
