@@ -26,17 +26,18 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->alias);
-        $rootNode->children();
+        $node = $treeBuilder->root($this->alias);
+        $node->children();
+        /** ArrayNodeDefinition $node */
 
         foreach ($this->extensions as $extension) {
             $class = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Definition', ucfirst(KodeCmsKodeExtension::EXT[$extension]));
             $definition = new $class();
             /** @var Definable $definition */
-            $rootNode->append($definition->getExtensionDefinition($extension));
+            $node->append($definition->getExtensionDefinition($extension));
         }
 
-        $rootNode->end();
+        $node->end();
 
         return $treeBuilder;
     }

@@ -47,7 +47,7 @@ class KodeCmsKodeExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        foreach ($this->loadConfig($configs, $container) as $key => $extension) {
+        foreach ($this->loadConfig($configs) as $key => $extension) {
             /** @var $extension array */
             foreach ($extension as $variable => $value) {
                 if ($value === \reset($extension)) {

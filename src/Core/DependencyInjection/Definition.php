@@ -22,6 +22,7 @@ class Definition implements Definable
     {
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root($extension);
+        /** @var ArrayNodeDefinition $node */
 
         // @formatter:off
         $node
@@ -42,6 +43,7 @@ class Definition implements Definable
     {
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root($extension);
+        /** @var ArrayNodeDefinition $node */
 
         // @formatter:off
         $node
