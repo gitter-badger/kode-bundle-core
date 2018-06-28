@@ -21,18 +21,18 @@ class KodeCmsKodeExtension extends Extension
     ];
 
     public const EXT = [
-        'translatable' => 'translatable',
-        'captcha' => 'captcha',
-        'guzzle' => 'guzzle',
-        'lexik' => 'translatable',
-        'mobile' => 'core',
-        'oauth' => 'oauth',
-        'openid' => 'oauth',
-        'openidconnect' => 'oauth',
-        'pagination' => 'position',
-        'position' => 'position',
-        'sitemap' => 'sitemap',
-        'core' => 'core',
+        Definable::TRANSLATABLE => Definable::TRANSLATABLE,
+        Definable::CAPTCHA => Definable::CAPTCHA,
+        Definable::GUZZLE => Definable::GUZZLE,
+        Definable::LEXIK => Definable::TRANSLATABLE,
+        Definable::MOBILE => Definable::CORE,
+        Definable::OAUTH => Definable::OAUTH,
+        Definable::OPENID => Definable::OAUTH,
+        Definable::OPENIDCONNECT => Definable::OAUTH,
+        Definable::PAGINATION => Definable::POSITION,
+        Definable::POSITION => Definable::POSITION,
+        Definable::SITEMAP => Definable::SITEMAP,
+        Definable::CORE => Definable::CORE,
     ];
 
     public function getAlias(): string
@@ -101,8 +101,7 @@ class KodeCmsKodeExtension extends Extension
     }
 
     /**
-     * @param array            $configs
-     * @param ContainerBuilder $container
+     * @param array $configs
      *
      * @return array[]
      * @throws Exception

@@ -6,7 +6,8 @@
     "keywords": [
         "kode-cms",
         "symfony",
-        "util"
+        "util",
+        "mobiledetect"
     ],
     "homepage": "https://github.com/k0d3r1s/kode-bundle-core",
     "license": "MIT",
