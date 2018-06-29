@@ -38,6 +38,11 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
         Definable::CORE => Definable::CORE,
     ];
 
+    public function prepend(ContainerBuilder $container)
+    {
+
+    }
+
     public function getAlias(): string
     {
         return KODE;
@@ -66,11 +71,6 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
             }
             $this->checkComponent($key, $container);
         }
-    }
-
-    public function prepend(ContainerBuilder $container)
-    {
-
     }
 
     private function unsetExtension(array &$extensions = []): void

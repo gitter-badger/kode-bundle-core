@@ -19,6 +19,11 @@ class StreamResponse extends Response
         $this->bufferSize = $bufferSize;
     }
 
+    public function getContent()
+    {
+        return false;
+    }
+
     /**
      * @return self|void
      *
@@ -48,10 +53,5 @@ class StreamResponse extends Response
                 return;
             }
         }
-    }
-
-    public function getContent()
-    {
-        return false;
     }
 }

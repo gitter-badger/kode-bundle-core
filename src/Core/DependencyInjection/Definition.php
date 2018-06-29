@@ -43,7 +43,6 @@ class Definition implements Definable
                     ->defaultValue(false)
                 ->end()
             ->end();
-
         // @formatter:on
 
         return $node;
@@ -62,7 +61,6 @@ class Definition implements Definable
             ->children()
 
             ->end();
-
         // @formatter:on
 
         return $node;
