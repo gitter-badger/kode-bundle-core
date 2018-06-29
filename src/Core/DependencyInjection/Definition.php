@@ -22,16 +22,16 @@ class Definition implements Definable
 
         switch ($extension) {
             case Definable::CORE:
-                return $this->getCoreDefinition($extension);
+                return $this->getCoreDefinition();
             case Definable::MOBILE:
-                return $this->getMobilDefinition($extension);
+                return $this->getMobileDefinition();
         }
     }
 
-    private function getCoreDefinition($extension): ArrayNodeDefinition
+    private function getCoreDefinition(): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root($extension);
+        $node = $treeBuilder->root(Definable::CORE);
         /** @var ArrayNodeDefinition $node */
 
         // @formatter:off
@@ -49,10 +49,10 @@ class Definition implements Definable
         return $node;
     }
 
-    private function getMobilDefinition($extension): ArrayNodeDefinition
+    private function getMobileDefinition(): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root($extension);
+        $node = $treeBuilder->root(Definable::MOBILE);
         /** @var ArrayNodeDefinition $node */
 
         // @formatter:off

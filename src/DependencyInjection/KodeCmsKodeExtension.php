@@ -8,6 +8,7 @@ use KodeCms\KodeBundle\DependencyInjection\Component\Definable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -15,7 +16,7 @@ if (!\defined('KODE')) {
     \define('KODE', 'kode_cms_kode');
 }
 
-class KodeCmsKodeExtension extends Extension
+class KodeCmsKodeExtension extends Extension implements PrependExtensionInterface
 {
     private const FILES = [
         'parameters.yaml',
@@ -65,6 +66,11 @@ class KodeCmsKodeExtension extends Extension
             }
             $this->checkComponent($key, $container);
         }
+    }
+
+    public function prepend(ContainerBuilder $container)
+    {
+
     }
 
     private function unsetExtension(array &$extensions = []): void
@@ -120,11 +126,11 @@ class KodeCmsKodeExtension extends Extension
         }
         if ($extensions !== $defined) {
             $diff = \array_diff($defined, $extensions);
-            throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', count($diff) > 1 ? 's' : '', implode(', ', $diff)));
+            throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', \count($diff) > 1 ? 's' : '', implode(', ', $diff)));
         }
 
-        if (!isset($extensions['core'])) {
-            $extensions[] = 'core';
+        if (!isset($extensions[Definable::CORE])) {
+            $extensions[] = Definable::CORE;
         }
 
         $configuration = new Configuration($this->getAlias(), $extensions);
@@ -140,7 +146,7 @@ class KodeCmsKodeExtension extends Extension
 
     private function checkComponent($key, ContainerBuilder $container): void
     {
-        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', ucfirst(self::EXT[$key]), \ucfirst($key));
+        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(self::EXT[$key]), \ucfirst($key));
         if (class_exists($className)) {
             $class = new $className();
             if ($class instanceof Configurable) {
