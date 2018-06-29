@@ -10,7 +10,11 @@ class Command
 {
     public static function initialize(array $arguments, ContainerAwareCommand $command): bool
     {
-        [$params, $input, $output] = $arguments;
+        [
+            $params,
+            $input,
+            $output,
+        ] = $arguments;
         /** @var InputInterface $input */
         /** @var OutputInterface $output */
 

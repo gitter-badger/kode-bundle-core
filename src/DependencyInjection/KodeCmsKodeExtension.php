@@ -2,12 +2,14 @@
 
 namespace KodeCms\KodeBundle\DependencyInjection;
 
+use Exception;
+use KodeCms\KodeBundle\DependencyInjection\Component\Configurable;
+use KodeCms\KodeBundle\DependencyInjection\Component\Definable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Exception;
 
 if (!\defined('KODE')) {
     \define('KODE', 'kode_cms_kode');
@@ -61,6 +63,7 @@ class KodeCmsKodeExtension extends Extension
                 }
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
+            $this->checkComponent($key, $container);
         }
     }
 
@@ -133,5 +136,16 @@ class KodeCmsKodeExtension extends Extension
         }
 
         return $config ?? [];
+    }
+
+    private function checkComponent($key, ContainerBuilder $container): void
+    {
+        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', ucfirst(self::EXT[$key]), \ucfirst($key));
+        if (class_exists($className)) {
+            $class = new $className();
+            if ($class instanceof Configurable) {
+                $class->configure($container, $this->getAlias());
+            }
+        }
     }
 }

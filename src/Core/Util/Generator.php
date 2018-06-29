@@ -14,6 +14,20 @@ class Generator
 
     private $sets = [];
 
+    public static function getUniqueId($length = 20): string
+    {
+        try {
+            return \bin2hex(random_bytes($length));
+        } catch (\Exception $exception) {
+            return self::getRandomString($length);
+        }
+    }
+
+    public static function getRandomString($length = 20, $chars = self::RAND_BASIC): string
+    {
+        return \substr(\str_shuffle(\str_repeat($chars, (int)\ceil((int)($length / \strlen($chars))))), 1, $length);
+    }
+
     public function generate($length = 20): string
     {
         $all = '';
@@ -68,19 +82,5 @@ class Generator
         $this->sets['symbols'] = self::PASS_SYMBOLS;
 
         return $this;
-    }
-
-    public static function getRandomString($length = 20, $chars = self::RAND_BASIC): string
-    {
-        return \substr(\str_shuffle(\str_repeat($chars, (int)\ceil((int)($length / \strlen($chars))))), 1, $length);
-    }
-
-    public static function getUniqueId($length = 20): string
-    {
-        try {
-            return \bin2hex(random_bytes($length));
-        } catch (\Exception $exception) {
-            return self::getRandomString($length);
-        }
     }
 }

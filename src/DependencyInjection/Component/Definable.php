@@ -1,6 +1,6 @@
 <?php
 
-namespace KodeCms\KodeBundle\DependencyInjection;
+namespace KodeCms\KodeBundle\DependencyInjection\Component;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 

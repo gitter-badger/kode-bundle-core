@@ -13,6 +13,28 @@ class Helper
         $bar = $tmp;
     }
 
+    public static function getSchema(Request $request): string
+    {
+        return self::useHttps($request) ? 'https://' : 'http://';
+    }
+
+    public static function useHttps(Request $request): bool
+    {
+        $checks = [
+            'HTTPS',
+            'SERVER_PORT',
+            'HTTP_X_FORWARDED_SSL',
+            'HTTP_X_FORWARDED_PROTO',
+        ];
+        foreach ($checks as $check) {
+            if (\call_user_func(\sprintf('check%s', Text::toCamelCase($check)), $request)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected static function checkHttps(Request $request): bool
     {
         return $request->server->has('HTTPS') && 'on' === $request->server->get('HTTPS');
@@ -31,22 +53,5 @@ class Helper
     protected static function checkHttpXForwardedProto(Request $request): bool
     {
         return $request->server->has('HTTP_X_FORWARDED_PROTO') && 'https' === $request->server->get('HTTP_X_FORWARDED_PROTO');
-    }
-
-    public static function useHttps(Request $request): bool
-    {
-        $checks = ['HTTPS', 'SERVER_PORT', 'HTTP_X_FORWARDED_SSL', 'HTTP_X_FORWARDED_PROTO'];
-        foreach ($checks as $check) {
-            if (\call_user_func(\sprintf('check%s', Text::toCamelCase($check)), $request)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static function getSchema(Request $request): string
-    {
-        return self::useHttps($request) ? 'https://' : 'http://';
     }
 }

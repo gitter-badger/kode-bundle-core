@@ -2,8 +2,8 @@
 
 namespace KodeCms\KodeBundle\Core\Twig;
 
-use Twig_Extension;
 use Mobile_Detect;
+use Twig_Extension;
 
 class MobileExtension extends Twig_Extension
 {

@@ -2,6 +2,7 @@
 
 namespace KodeCms\KodeBundle\DependencyInjection;
 
+use KodeCms\KodeBundle\DependencyInjection\Component\Definable;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

@@ -18,7 +18,10 @@ trait TwigTrait
                 unset($function[2]);
                 $output[] = new $class($call, $function, $options);
             } else {
-                $output[] = new $class($call, [$this, $function,]);
+                $output[] = new $class($call, [
+                    $this,
+                    $function,
+                ]);
             }
         }
 

@@ -20,46 +20,6 @@ class Date
         return $result;
     }
 
-    public static function validateDate($date): bool
-    {
-        $date = \str_replace('-', '', $date);
-        $day = (int)\substr($date, 0, 2);
-        $month = (int)\substr($date, 2, 2);
-
-        if ($month < 0 || $month > 12) {
-            return false;
-        }
-        // @formatter:off
-        $months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        // @formatter:on
-        if ((int)\substr($date, 4, 2) % 4 === 0) {
-            $months[1] = 29;
-        }
-
-        return $day > 0 && $day <= $months[$month - 1];
-    }
-
-    public static function validateDate2($date, $format = self::FORMAT): bool
-    {
-        $object = \DateTime::createFromFormat($format, $date);
-
-        return $object && $object->format($format) === $date;
-    }
-
-    public static function excelDate($timestamp, $format = self::FORMAT)
-    {
-        $base = 25569;
-        if ($timestamp >= $base) {
-            $unix = ($timestamp - $base) * 86400;
-            $date = \gmdate($format, $unix);
-            if (self::validateDate2($date, $format)) {
-                return $date;
-            }
-        }
-
-        return $timestamp;
-    }
-
     public static function newPKValidate($personCode): bool
     {
         $personCode = \str_replace('-', '', $personCode);
@@ -80,5 +40,45 @@ class Date
         }
 
         return $personCode[10] === (1 - $remainder);
+    }
+
+    public static function validateDate($date): bool
+    {
+        $date = \str_replace('-', '', $date);
+        $day = (int)\substr($date, 0, 2);
+        $month = (int)\substr($date, 2, 2);
+
+        if ($month < 0 || $month > 12) {
+            return false;
+        }
+        // @formatter:off
+        $months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        // @formatter:on
+        if ((int)\substr($date, 4, 2) % 4 === 0) {
+            $months[1] = 29;
+        }
+
+        return $day > 0 && $day <= $months[$month - 1];
+    }
+
+    public static function excelDate($timestamp, $format = self::FORMAT)
+    {
+        $base = 25569;
+        if ($timestamp >= $base) {
+            $unix = ($timestamp - $base) * 86400;
+            $date = \gmdate($format, $unix);
+            if (self::validateDate2($date, $format)) {
+                return $date;
+            }
+        }
+
+        return $timestamp;
+    }
+
+    public static function validateDate2($date, $format = self::FORMAT): bool
+    {
+        $object = \DateTime::createFromFormat($format, $date);
+
+        return $object && $object->format($format) === $date;
     }
 }
