@@ -113,9 +113,23 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
      * @param array $configs
      *
      * @return array[]
-     * @throws Exception
+     *
+     * @throws InvalidConfigurationException
      */
     private function loadConfig(array $configs): array
+    {
+        $configuration = new Configuration($this->getAlias(), $this->parseExtensions($configs));
+        /** @var $config array[] */
+        $config = $this->processConfiguration($configuration, $configs);
+
+        if (!empty($config)) {
+            $this->unsetExtension($config);
+        }
+
+        return $config ?? [];
+    }
+
+    private function parseExtensions(array $configs): array
     {
         $extensions = [];
         $defined = $this->getExtensions($configs);
@@ -133,24 +147,16 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
             $extensions[] = Definable::CORE;
         }
 
-        $configuration = new Configuration($this->getAlias(), $extensions);
-        /** @var $config array[] */
-        $config = $this->processConfiguration($configuration, $configs);
-
-        if (!empty($config)) {
-            $this->unsetExtension($config);
-        }
-
-        return $config ?? [];
+        return $extensions;
     }
 
     private function checkComponent($key, ContainerBuilder $container): void
     {
         $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(self::EXT[$key]), \ucfirst($key));
         if (class_exists($className)) {
-            $class = new $className();
+            $class = new $className($this->getAlias());
             if ($class instanceof Configurable) {
-                $class->configure($container, $this->getAlias());
+                $class->configure($container);
             }
         }
     }

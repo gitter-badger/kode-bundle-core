@@ -16,7 +16,7 @@ trait LocaleResolverTrait
         }
 
         $functions = [
-            'returnByParameter',
+            'returnByQueryParameter',
             'returnByPreviousSession',
             'returnByCookie',
             'returnByLang',
@@ -31,7 +31,7 @@ trait LocaleResolverTrait
         return null;
     }
 
-    protected function returnByParameter(Request $request)
+    protected function returnByQueryParameter(Request $request)
     {
         foreach (['hl', 'lang'] as $parameter) {
             if ($request->query->has($parameter)) {
@@ -73,6 +73,17 @@ trait LocaleResolverTrait
 
     protected function returnByLang(Request $request, array $availableLocales)
     {
+        foreach ($this->parseLanguages($request) as $lang) {
+            if (\in_array($lang, $availableLocales, true)) {
+                return $lang;
+            }
+        }
+
+        return null;
+    }
+
+    private function parseLanguages(Request $request)
+    {
         $languages = [];
         foreach ($request->getLanguages() as $language) {
             if (\strlen($language) !== 2) {
@@ -82,15 +93,7 @@ trait LocaleResolverTrait
                 $languages[] = $language;
             }
         }
-        $languages = array_unique($languages);
-        if (!empty($languages)) {
-            foreach ($languages as $lang) {
-                if (\in_array($lang, $availableLocales, true)) {
-                    return $lang;
-                }
-            }
-        }
 
-        return null;
+        return array_unique($languages) ?? [];
     }
 }
