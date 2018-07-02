@@ -40,7 +40,6 @@ class KodeCmsKodeExtension extends Extension
         Definable::POSITION,
         Definable::SITEMAP,
     ];
-    public static $extensions = [];
 
     public function getAlias(): string
     {
