@@ -17,9 +17,6 @@ class KodeCmsKodeExtension extends Extension
         'parameters.yaml',
         'services.yaml',
     ];
-
-    public static $extensions = [];
-
     public const EXT = [
         Definable::TRANSLATABLE => Definable::TRANSLATABLE,
         Definable::CAPTCHA => Definable::CAPTCHA,
@@ -34,7 +31,6 @@ class KodeCmsKodeExtension extends Extension
         Definable::SITEMAP => Definable::SITEMAP,
         Definable::CORE => Definable::CORE,
     ];
-
     public const FIXED = [
         Definable::TRANSLATABLE,
         Definable::CAPTCHA,
@@ -44,6 +40,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::POSITION,
         Definable::SITEMAP,
     ];
+    public static $extensions = [];
 
     public function getAlias(): string
     {
@@ -52,7 +49,6 @@ class KodeCmsKodeExtension extends Extension
 
     /**
      * {@inheritdoc}
-     *
      * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container): void

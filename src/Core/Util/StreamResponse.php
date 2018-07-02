@@ -26,7 +26,6 @@ class StreamResponse extends Response
 
     /**
      * @return self|void
-     *
      * @throws \RuntimeException
      */
     public function sendContent()
