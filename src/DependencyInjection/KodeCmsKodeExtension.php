@@ -41,6 +41,8 @@ class KodeCmsKodeExtension extends Extension
         Definable::SITEMAP,
     ];
 
+    protected static $extensions = [];
+
     public function getAlias(): string
     {
         return KODE;
