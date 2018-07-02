@@ -8,20 +8,17 @@ use KodeCms\KodeBundle\DependencyInjection\Component\Definable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-if (!\defined('KODE')) {
-    \define('KODE', 'kode_cms_kode');
-}
-
-class KodeCmsKodeExtension extends Extension implements PrependExtensionInterface
+class KodeCmsKodeExtension extends Extension
 {
     private const FILES = [
         'parameters.yaml',
         'services.yaml',
     ];
+
+    public static $extensions = [];
 
     public const EXT = [
         Definable::TRANSLATABLE => Definable::TRANSLATABLE,
@@ -38,10 +35,15 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
         Definable::CORE => Definable::CORE,
     ];
 
-    public function prepend(ContainerBuilder $container)
-    {
-
-    }
+    public const FIXED = [
+        Definable::TRANSLATABLE,
+        Definable::CAPTCHA,
+        Definable::GUZZLE,
+        Definable::CORE,
+        Definable::OAUTH,
+        Definable::POSITION,
+        Definable::SITEMAP,
+    ];
 
     public function getAlias(): string
     {
@@ -113,12 +115,12 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
      * @param array $configs
      *
      * @return array[]
-     *
      * @throws InvalidConfigurationException
      */
     private function loadConfig(array $configs): array
     {
-        $configuration = new Configuration($this->getAlias(), $this->parseExtensions($configs));
+        $this->parseExtensions($configs);
+        $configuration = new Configuration($this->getAlias(), self::$extensions);
         /** @var $config array[] */
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -129,25 +131,22 @@ class KodeCmsKodeExtension extends Extension implements PrependExtensionInterfac
         return $config ?? [];
     }
 
-    private function parseExtensions(array $configs): array
+    private function parseExtensions(array $configs): void
     {
-        $extensions = [];
         $defined = $this->getExtensions($configs);
         foreach ($defined as $def) {
             if (is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, self::EXT[$def]))) {
-                $extensions[] = $def;
+                self::$extensions[] = $def;
             }
         }
-        if ($extensions !== $defined) {
-            $diff = \array_diff($defined, $extensions);
+        if (self::$extensions !== $defined) {
+            $diff = \array_diff($defined, self::$extensions);
             throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', \count($diff) > 1 ? 's' : '', implode(', ', $diff)));
         }
 
-        if (!isset($extensions[Definable::CORE])) {
-            $extensions[] = Definable::CORE;
+        if (!isset($this->extensions[Definable::CORE])) {
+            self::$extensions[] = Definable::CORE;
         }
-
-        return $extensions;
     }
 
     private function checkComponent($key, ContainerBuilder $container): void
