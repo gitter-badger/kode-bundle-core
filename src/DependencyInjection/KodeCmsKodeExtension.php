@@ -30,6 +30,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::POSITION => Definable::POSITION,
         Definable::SITEMAP => Definable::SITEMAP,
         Definable::CORE => Definable::CORE,
+        Definable::REACT => Definable::REACT,
     ];
     public const FIXED = [
         Definable::TRANSLATABLE,
@@ -39,6 +40,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::OAUTH,
         Definable::POSITION,
         Definable::SITEMAP,
+        Definable::REACT,
     ];
 
     protected static $extensions = [];
@@ -60,7 +62,11 @@ class KodeCmsKodeExtension extends Extension
                 if ($value === \reset($extension)) {
                     $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
                     foreach (self::FILES as $file) {
-                        $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
+                        if (self::EXT[$key] === Definable::CORE) {
+                            $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, self::EXT[$key], \ucfirst(self::EXT[$key]), $key, $file);
+                        } else {
+                            $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
+                        }
                         if (\file_exists($location)) {
                             $loader->load($location);
                         }
@@ -97,7 +103,7 @@ class KodeCmsKodeExtension extends Extension
                 if (\preg_match($pattern, $e->getMessage(), $matches) === 1) {
                     $extensions = explode(',', $matches[1]);
                     foreach ($extensions as &$extension) {
-                        $extension = trim($extension);
+                        $extension = \trim($extension);
                     }
                     unset($extension);
                     break;
@@ -132,13 +138,13 @@ class KodeCmsKodeExtension extends Extension
     {
         $defined = $this->getExtensions($configs);
         foreach ($defined as $def) {
-            if (is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, self::EXT[$def]))) {
+            if (\is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, self::EXT[$def]))) {
                 self::$extensions[] = $def;
             }
         }
         if (self::$extensions !== $defined) {
             $diff = \array_diff($defined, self::$extensions);
-            throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', \count($diff) > 1 ? 's' : '', implode(', ', $diff)));
+            throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', \count($diff) > 1 ? 's' : '', \implode(', ', $diff)));
         }
 
         if (!isset($this->extensions[Definable::CORE])) {
