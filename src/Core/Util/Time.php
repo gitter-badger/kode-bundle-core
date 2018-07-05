@@ -7,7 +7,7 @@ use DateTime;
 class Time
 {
     /**
-     * @var DateTime
+     * @var DateTime|null
      */
     private $date;
 
