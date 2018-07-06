@@ -3,6 +3,7 @@
 namespace KodeCms\KodeBundle\Core\Util;
 
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
 class StreamResponse extends Response
@@ -25,8 +26,8 @@ class StreamResponse extends Response
     }
 
     /**
-     * @return self|void
-     * @throws \RuntimeException
+     * @return $this|void
+     * @throws RuntimeException
      */
     public function sendContent()
     {

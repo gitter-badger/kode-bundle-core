@@ -57,24 +57,28 @@ class KodeCmsKodeExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         foreach ($this->loadConfig($configs) as $key => $extension) {
-            /** @var $extension array */
-            foreach ($extension as $variable => $value) {
-                if ($value === \reset($extension)) {
-                    $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
-                    foreach (self::FILES as $file) {
-                        $this->getLocation($location, $key, $file);
-                        if (\file_exists($location)) {
-                            $loader->load($location);
-                        }
-                    }
-                }
-                $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
-            }
+            $this->loadExtension($container, $key, $extension);
             $this->checkComponent($key, $container);
         }
     }
 
-    private function getLocation(&$location, $key, $file): string
+    private function loadExtension(ContainerBuilder $container, $key, array $extension): void
+    {
+        foreach ($extension as $variable => $value) {
+            if ($value === \reset($extension)) {
+                $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
+                foreach (self::FILES as $file) {
+                    $this->getLocation($location, $key, $file);
+                    if (\file_exists($location)) {
+                        $loader->load($location);
+                    }
+                }
+            }
+            $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
+        }
+    }
+
+    private function getLocation(&$location, $key, $file): void
     {
         if (self::EXT[$key] === Definable::CORE) {
             $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, self::EXT[$key], \ucfirst(self::EXT[$key]), $key, $file);

@@ -35,22 +35,32 @@ class KodeCmsKodeBundle extends Bundle
         parent::build($container);
 
         foreach (KodeCmsKodeExtension::FIXED as $extension) {
-            $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
-            if (class_exists($className)) {
-                $class = new $className();
-                if ($class instanceof CompilerPassInterface) {
-                    $container->addCompilerPass($class);
-                }
-            }
-            $this->getLocation($dir, $extension);
-            if (\is_dir($dir)) {
-                $namespace = \sprintf('KodeCms\KodeBundle\%s\Entity', \ucfirst($extension));
-                $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver([$namespace], [$dir]));
+            $this->addPasses($container, $extension);
+            $this->addEntities($container, $extension);
+        }
+    }
+
+    private function addPasses(ContainerBuilder $container, $extension): void
+    {
+        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
+        if (class_exists($className)) {
+            $class = new $className();
+            if ($class instanceof CompilerPassInterface) {
+                $container->addCompilerPass($class);
             }
         }
     }
 
-    private function getLocation(&$dir, $extension): string
+    private function addEntities(ContainerBuilder $container, $extension): void
+    {
+        $this->getLocation($dir, $extension);
+        if (\is_dir($dir)) {
+            $namespace = \sprintf('KodeCms\KodeBundle\%s\Entity', \ucfirst($extension));
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver([$namespace], [$dir]));
+        }
+    }
+
+    private function getLocation(&$dir, $extension): void
     {
         if ($extension === Definable::CORE) {
             $dir = \sprintf('%s/../../kode-bundle-%s/src/%s/Entity', __DIR__, $extension, \ucfirst(Definable::CORE));
