@@ -11,7 +11,7 @@ interface Definable
     public const CAPTCHA = 'captcha';
     public const GUZZLE = 'guzzle';
     public const LEXIK = 'lexik';
-    public const MOBILE = 'mobile';
+    public const SCRIPT = 'script';
     public const OAUTH = 'oauth';
     public const OPENID = 'openid';
     public const OPENIDCONNECT = 'openidconnect';

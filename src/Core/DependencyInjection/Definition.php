@@ -11,7 +11,7 @@ class Definition implements Definable
 {
     private const ALLOWED = [
         Definable::CORE,
-        Definable::MOBILE,
+        Definable::SCRIPT,
     ];
 
     public function getExtensionDefinition($extension): ArrayNodeDefinition
@@ -23,8 +23,8 @@ class Definition implements Definable
         switch ($extension) {
             case Definable::CORE:
                 return $this->getCoreDefinition();
-            case Definable::MOBILE:
-                return $this->getMobileDefinition();
+            case Definable::SCRIPT:
+                return $this->getScriptDefinition();
         }
     }
 
@@ -48,10 +48,10 @@ class Definition implements Definable
         return $node;
     }
 
-    private function getMobileDefinition(): ArrayNodeDefinition
+    private function getScriptDefinition(): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root(Definable::MOBILE);
+        $node = $treeBuilder->root(Definable::SCRIPT);
         /** @var ArrayNodeDefinition $node */
 
         // @formatter:off

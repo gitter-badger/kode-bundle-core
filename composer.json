@@ -27,6 +27,8 @@
         "psr/http-message": "^1.0",
         "symfony/config": "*",
         "symfony/console": "*",
+        "symfony/intl": "*",
+        "symfony/translation": "*",
         "symfony/dependency-injection": "*",
         "symfony/framework-bundle": "*",
         "symfony/http-foundation": "*",

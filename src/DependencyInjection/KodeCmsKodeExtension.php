@@ -22,7 +22,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::CAPTCHA => Definable::CAPTCHA,
         Definable::GUZZLE => Definable::GUZZLE,
         Definable::LEXIK => Definable::TRANSLATABLE,
-        Definable::MOBILE => Definable::CORE,
+        Definable::SCRIPT => Definable::CORE,
         Definable::OAUTH => Definable::OAUTH,
         Definable::OPENID => Definable::OAUTH,
         Definable::OPENIDCONNECT => Definable::OAUTH,

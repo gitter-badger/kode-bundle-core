@@ -1,0 +1,22 @@
+services:
+    kode_cms_kode.script.service.mobile_detect:
+        class: Mobile_Detect
+
+    kode_cms_kode.script.twig.mobile_extension:
+        class: KodeCms\KodeBundle\Core\Twig\MobileExtension
+        public: false
+        arguments:
+            - '%kode_cms_kode.core.short_functions%'
+        tags:
+            -
+                name: twig.extension
+
+    kode_cms_kode.script.twig.country_extension:
+        class: KodeCms\KodeBundle\Core\Twig\CountryExtension
+        public: false
+        arguments:
+            - '@request_stack'
+            - '%kode_cms_kode.core.short_functions%'
+        tags:
+            -
+                name: twig.extension
