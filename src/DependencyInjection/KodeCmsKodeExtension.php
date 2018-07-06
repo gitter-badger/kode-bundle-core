@@ -62,11 +62,7 @@ class KodeCmsKodeExtension extends Extension
                 if ($value === \reset($extension)) {
                     $loader = new YamlFileLoader($container, new FileLocator(\sprintf('%s/../%s/Resources/config', __DIR__, \ucfirst($key))));
                     foreach (self::FILES as $file) {
-                        if (self::EXT[$key] === Definable::CORE) {
-                            $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, self::EXT[$key], \ucfirst(self::EXT[$key]), $key, $file);
-                        } else {
-                            $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
-                        }
+                        $this->getLocation($location, $key, $file);
                         if (\file_exists($location)) {
                             $loader->load($location);
                         }
@@ -75,6 +71,15 @@ class KodeCmsKodeExtension extends Extension
                 $container->setParameter(\sprintf('%s.%s.%s', $this->getAlias(), $key, $variable), $value);
             }
             $this->checkComponent($key, $container);
+        }
+    }
+
+    private function getLocation(&$location, $key, $file): string
+    {
+        if (self::EXT[$key] === Definable::CORE) {
+            $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, self::EXT[$key], \ucfirst(self::EXT[$key]), $key, $file);
+        } else {
+            $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
         }
     }
 

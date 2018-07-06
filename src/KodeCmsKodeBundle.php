@@ -33,6 +33,7 @@ class KodeCmsKodeBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
+
         foreach (KodeCmsKodeExtension::FIXED as $extension) {
             $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
             if (class_exists($className)) {
@@ -41,15 +42,20 @@ class KodeCmsKodeBundle extends Bundle
                     $container->addCompilerPass($class);
                 }
             }
-            if ($extension === Definable::CORE) {
-                $dir = \sprintf('%s/../../kode-bundle-%s/src/%s/Entity', __DIR__, $extension, \ucfirst(Definable::CORE));
-            } else {
-                $dir = \sprintf('%s/../../kode-bundle-%s/src/Entity', __DIR__, $extension);
-            }
+            $this->getLocation($dir, $extension);
             if (\is_dir($dir)) {
                 $namespace = \sprintf('KodeCms\KodeBundle\%s\Entity', \ucfirst($extension));
                 $container->addCompilerPass(DoctrineOrmMappingsPass::createAnnotationMappingDriver([$namespace], [$dir]));
             }
+        }
+    }
+
+    private function getLocation(&$dir, $extension): string
+    {
+        if ($extension === Definable::CORE) {
+            $dir = \sprintf('%s/../../kode-bundle-%s/src/%s/Entity', __DIR__, $extension, \ucfirst(Definable::CORE));
+        } else {
+            $dir = \sprintf('%s/../../kode-bundle-%s/src/Entity', __DIR__, $extension);
         }
     }
 }

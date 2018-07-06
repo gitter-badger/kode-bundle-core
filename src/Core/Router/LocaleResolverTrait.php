@@ -33,7 +33,9 @@ trait LocaleResolverTrait
 
     protected function returnByQueryParameter(Request $request)
     {
+        // @formatter:off
         foreach (['hl', 'lang'] as $parameter) {
+        // @formatter:on
             if ($request->query->has($parameter)) {
                 $hostLanguage = $request->query->get($parameter);
 
