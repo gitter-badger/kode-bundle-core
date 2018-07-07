@@ -17,35 +17,6 @@ class KodeCmsKodeExtension extends Extension
         'parameters.yaml',
         'services.yaml',
     ];
-    public const EXT = [
-        Definable::TRANSLATABLE => Definable::TRANSLATABLE,
-        Definable::CAPTCHA => Definable::CAPTCHA,
-        Definable::GUZZLE => Definable::GUZZLE,
-        Definable::LEXIK => Definable::TRANSLATABLE,
-        Definable::SCRIPT => Definable::CORE,
-        Definable::OAUTH => Definable::OAUTH,
-        Definable::OPENID => Definable::OAUTH,
-        Definable::OPENIDCONNECT => Definable::OAUTH,
-        Definable::PAGINATION => Definable::POSITION,
-        Definable::POSITION => Definable::POSITION,
-        Definable::SITEMAP => Definable::SITEMAP,
-        Definable::CORE => Definable::CORE,
-        Definable::REACT => Definable::REACT,
-        Definable::SEARCH => Definable::SEARCH,
-    ];
-    public const FIXED = [
-        Definable::TRANSLATABLE,
-        Definable::CAPTCHA,
-        Definable::GUZZLE,
-        Definable::CORE,
-        Definable::OAUTH,
-        Definable::POSITION,
-        Definable::SITEMAP,
-        Definable::REACT,
-        Definable::SEARCH,
-    ];
-
-    private static $extensions = [];
 
     public function getAlias(): string
     {
@@ -89,10 +60,10 @@ class KodeCmsKodeExtension extends Extension
 
     private function getLocation(&$location, $key, $file): void
     {
-        if (self::EXT[$key] === Definable::CORE) {
-            $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, self::EXT[$key], \ucfirst(self::EXT[$key]), $key, $file);
+        if (Definable::EXT[$key] === Definable::CORE) {
+            $location = \sprintf('%s/../../../kode-bundle-%s/src/%s/Resources/config/%s/%s', __DIR__, Definable::EXT[$key], \ucfirst(Definable::EXT[$key]), $key, $file);
         } else {
-            $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, self::EXT[$key], $key, $file);
+            $location = \sprintf('%s/../../../kode-bundle-%s/src/Resources/config/%s/%s', __DIR__, Definable::EXT[$key], $key, $file);
         }
     }
 
@@ -140,8 +111,8 @@ class KodeCmsKodeExtension extends Extension
      */
     private function loadConfig(array $configs): array
     {
-        $this->parseExtensions($configs);
-        $configuration = new Configuration($this->getAlias(), self::$extensions);
+        $extensions = $this->parseExtensions($configs);
+        $configuration = new Configuration($this->getAlias(), $extensions);
         /** @var $config array[] */
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -152,27 +123,30 @@ class KodeCmsKodeExtension extends Extension
         return $config ?? [];
     }
 
-    private function parseExtensions(array $configs): void
+    private function parseExtensions(array $configs): array
     {
+        $extensions = [];
         $defined = $this->getExtensions($configs);
         foreach ($defined as $def) {
-            if (\is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, self::EXT[$def]))) {
-                self::$extensions[] = $def;
+            if (\is_dir(\sprintf('%s/../../../kode-bundle-%s', __DIR__, Definable::EXT[$def]))) {
+                $extensions[] = $def;
             }
         }
-        if (self::$extensions !== $defined) {
-            $diff = \array_diff($defined, self::$extensions);
+        if ($extensions !== $defined) {
+            $diff = \array_diff($defined, $extensions);
             throw new InvalidConfigurationException(\sprintf('Invalid extension%s: %s', \count($diff) > 1 ? 's' : '', \implode(', ', $diff)));
         }
 
         if (!isset($this->extensions[Definable::CORE])) {
-            self::$extensions[] = Definable::CORE;
+            $extensions[] = Definable::CORE;
         }
+
+        return $extensions;
     }
 
     private function checkComponent($key, ContainerBuilder $container): void
     {
-        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(self::EXT[$key]), \ucfirst($key));
+        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(Definable::EXT[$key]), \ucfirst($key));
         if (\class_exists($className)) {
             $class = new $className($this->getAlias());
             if ($class instanceof Configurable) {

@@ -22,7 +22,7 @@ class KodeCmsKodeBundle extends Bundle
     {
         parent::build($container);
 
-        foreach (KodeCmsKodeExtension::FIXED as $extension) {
+        foreach (Definable::FIXED as $extension) {
             $this->addPasses($container, $extension);
             $this->addEntities($container, $extension);
         }
@@ -30,7 +30,7 @@ class KodeCmsKodeBundle extends Bundle
 
     private function addPasses(ContainerBuilder $container, $extension): void
     {
-        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
+        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(Definable::EXT[$extension]), \ucfirst($extension));
         if (\class_exists($className)) {
             $class = new $className();
             if ($class instanceof CompilerPassInterface) {
