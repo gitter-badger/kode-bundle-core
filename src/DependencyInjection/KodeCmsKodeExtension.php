@@ -31,6 +31,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::SITEMAP => Definable::SITEMAP,
         Definable::CORE => Definable::CORE,
         Definable::REACT => Definable::REACT,
+        Definable::SEARCH => Definable::SEARCH,
     ];
     public const FIXED = [
         Definable::TRANSLATABLE,
@@ -41,6 +42,7 @@ class KodeCmsKodeExtension extends Extension
         Definable::POSITION,
         Definable::SITEMAP,
         Definable::REACT,
+        Definable::SEARCH,
     ];
 
     private static $extensions = [];

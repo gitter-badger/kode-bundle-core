@@ -19,6 +19,7 @@ interface Definable
     public const PAGINATION = 'pagination';
     public const SITEMAP = 'sitemap';
     public const REACT = 'react';
+    public const SEARCH = 'search';
 
     public function getExtensionDefinition($extension): ArrayNodeDefinition;
 }
