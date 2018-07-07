@@ -2,6 +2,8 @@
 
 namespace KodeCms\KodeBundle\Core\Util;
 
+use DateTime;
+
 class Date
 {
     public const FORMAT = 'd-m-Y H:i:s';
@@ -13,11 +15,30 @@ class Date
 
         if (\strlen($personCode) !== 11 || \preg_match('/^\d+$/', $personCode) === null) {
             $result = false;
-        } elseif (((int)\substr($personCode, 0, 2) === 32 && !self::newPKValidate($personCode)) || !self::validateDate($personCode)) {
+        } elseif (!self::validateDate($personCode) || ((int)\substr($personCode, 0, 2) === 32 && !self::newPKValidate($personCode))) {
             $result = false;
         }
 
         return $result;
+    }
+
+    public static function validateDate($date): bool
+    {
+        $date = \str_replace('-', '', $date);
+        $day = (int)\substr($date, 0, 2);
+        $month = (int)\substr($date, 2, 2);
+
+        if ($month < 0 || $month > 12) {
+            return false;
+        }
+        // @formatter:off
+        $months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        // @formatter:on
+        if ((int)\substr($date, 4, 2) % 4 === 0) {
+            $months[1] = 29;
+        }
+
+        return $day > 0 && $day <= $months[$month - 1];
     }
 
     public static function newPKValidate($personCode): bool
@@ -42,25 +63,6 @@ class Date
         return $personCode[10] === (1 - $remainder);
     }
 
-    public static function validateDate($date): bool
-    {
-        $date = \str_replace('-', '', $date);
-        $day = (int)\substr($date, 0, 2);
-        $month = (int)\substr($date, 2, 2);
-
-        if ($month < 0 || $month > 12) {
-            return false;
-        }
-        // @formatter:off
-        $months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        // @formatter:on
-        if ((int)\substr($date, 4, 2) % 4 === 0) {
-            $months[1] = 29;
-        }
-
-        return $day > 0 && $day <= $months[$month - 1];
-    }
-
     public static function excelDate($timestamp, $format = self::FORMAT)
     {
         $base = 25569;
@@ -77,7 +79,7 @@ class Date
 
     public static function validateDate2($date, $format = self::FORMAT): bool
     {
-        $object = \DateTime::createFromFormat($format, $date);
+        $object = DateTime::createFromFormat($format, $date);
 
         return $object && $object->format($format) === $date;
     }

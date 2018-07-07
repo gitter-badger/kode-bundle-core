@@ -18,18 +18,6 @@ class KodeCmsKodeBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function getContainerExtension()
-    {
-        if ($this->extension === null) {
-            return new KodeCmsKodeExtension();
-        }
-
-        return $this->extension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
@@ -42,8 +30,8 @@ class KodeCmsKodeBundle extends Bundle
 
     private function addPasses(ContainerBuilder $container, $extension): void
     {
-        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
-        if (class_exists($className)) {
+        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Compiler\%sPass', \ucfirst(KodeCmsKodeExtension::EXT[$extension]), \ucfirst($extension));
+        if (\class_exists($className)) {
             $class = new $className();
             if ($class instanceof CompilerPassInterface) {
                 $container->addCompilerPass($class);
@@ -67,5 +55,17 @@ class KodeCmsKodeBundle extends Bundle
         } else {
             $dir = \sprintf('%s/../../kode-bundle-%s/src/Entity', __DIR__, $extension);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtension()
+    {
+        if ($this->extension === null) {
+            return new KodeCmsKodeExtension();
+        }
+
+        return $this->extension;
     }
 }

@@ -43,11 +43,11 @@ class KodeCmsKodeExtension extends Extension
         Definable::REACT,
     ];
 
-    protected static $extensions = [];
+    private static $extensions = [];
 
     public function getAlias(): string
     {
-        return KODE;
+        return \KODE;
     }
 
     /**
@@ -62,6 +62,13 @@ class KodeCmsKodeExtension extends Extension
         }
     }
 
+    /**
+     * @param ContainerBuilder $container
+     * @param $key
+     * @param array $extension
+     *
+     * @throws Exception
+     */
     private function loadExtension(ContainerBuilder $container, $key, array $extension): void
     {
         foreach ($extension as $variable => $value) {
@@ -110,7 +117,7 @@ class KodeCmsKodeExtension extends Extension
         } catch (Exception $e) {
             foreach ($patterns as $pattern) {
                 if (\preg_match($pattern, $e->getMessage(), $matches) === 1) {
-                    $extensions = explode(',', $matches[1]);
+                    $extensions = \explode(',', $matches[1]);
                     foreach ($extensions as &$extension) {
                         $extension = \trim($extension);
                     }
@@ -163,8 +170,8 @@ class KodeCmsKodeExtension extends Extension
 
     private function checkComponent($key, ContainerBuilder $container): void
     {
-        $className = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(self::EXT[$key]), \ucfirst($key));
-        if (class_exists($className)) {
+        $className = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\%sConfiguration', \ucfirst(self::EXT[$key]), \ucfirst($key));
+        if (\class_exists($className)) {
             $class = new $className($this->getAlias());
             if ($class instanceof Configurable) {
                 $class->configure($container);

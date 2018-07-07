@@ -2,6 +2,8 @@
 
 namespace KodeCms\KodeBundle\Core\Util;
 
+use Exception;
+
 class Generator
 {
     public const PASS_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz';
@@ -18,7 +20,7 @@ class Generator
     {
         try {
             return \bin2hex(random_bytes($length));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return self::getRandomString($length);
         }
     }
@@ -36,7 +38,7 @@ class Generator
             $password .= $set[$this->tweak(\str_split($set))];
             $all .= $set;
         }
-        $all = str_split($all);
+        $all = \str_split($all);
         for ($i = 0; $i < $length - \count($this->sets); $i++) {
             $password .= $all[$this->tweak($all)];
         }

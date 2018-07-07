@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
         /** ArrayNodeDefinition $node */
 
         foreach ($this->extensions as $extension) {
-            $class = sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Definition', ucfirst(KodeCmsKodeExtension::EXT[$extension]));
+            $class = \sprintf('KodeCms\KodeBundle\%s\DependencyInjection\Definition', \ucfirst(KodeCmsKodeExtension::EXT[$extension]));
             $definition = new $class();
             /** @var Definable $definition */
             $node->append($definition->getExtensionDefinition($extension));

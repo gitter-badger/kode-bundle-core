@@ -9,7 +9,7 @@ trait TwigTrait
     public function makeArray(array $input, $type = 'filter'): array
     {
         $output = [];
-        $class = \sprintf('\\Twig_Simple%s', ucfirst($type));
+        $class = \sprintf('\\Twig_Simple%s', \ucfirst($type));
         $this->makeInput($input, $input);
 
         foreach ($input as $call => $function) {

@@ -21,7 +21,7 @@ class Iter
 
     public static function removeDuplicates(&$array): void
     {
-        $array = \array_map('unserialize', \array_unique(\array_map('serialize', $array)));
+        $array = \array_map('\unserialize', \array_unique(\array_map('\serialize', $array)));
     }
 
     public static function multiple(array $keys): bool

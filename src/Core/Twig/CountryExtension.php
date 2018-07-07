@@ -18,7 +18,7 @@ class CountryExtension extends Twig_Extension
         $this->locale = $requestStack->getCurrentRequest()->getDefaultLocale();
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         $input = [
             'country' => 'getCountryName',

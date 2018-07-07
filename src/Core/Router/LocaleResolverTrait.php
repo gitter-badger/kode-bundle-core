@@ -39,7 +39,7 @@ trait LocaleResolverTrait
             if ($request->query->has($parameter)) {
                 $hostLanguage = $request->query->get($parameter);
 
-                if (preg_match('#^[a-z]{2}(?:_[a-z]{2})?$#i', $hostLanguage)) {
+                if (\preg_match('#^[a-z]{2}(?:_[a-z]{2})?$#i', $hostLanguage)) {
                     return $hostLanguage;
                 }
             }
@@ -65,7 +65,7 @@ trait LocaleResolverTrait
         if ($request->cookies->has($this->cookieName)) {
             $hostLanguage = $request->cookies->get($this->cookieName);
 
-            if (preg_match('#^[a-z]{2}(?:_[a-z]{2})?$#i', $hostLanguage)) {
+            if (\preg_match('#^[a-z]{2}(?:_[a-z]{2})?$#i', $hostLanguage)) {
                 return $hostLanguage;
             }
         }
@@ -84,18 +84,18 @@ trait LocaleResolverTrait
         return null;
     }
 
-    private function parseLanguages(Request $request)
+    private function parseLanguages(Request $request): array
     {
         $languages = [];
         foreach ($request->getLanguages() as $language) {
             if (\strlen($language) !== 2) {
-                $newLang = explode('_', $language, 2);
-                $languages[] = reset($newLang);
+                $newLang = \explode('_', $language, 2);
+                $languages[] = \reset($newLang);
             } else {
                 $languages[] = $language;
             }
         }
 
-        return array_unique($languages) ?? [];
+        return \array_unique($languages) ?? [];
     }
 }
