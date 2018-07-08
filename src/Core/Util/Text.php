@@ -44,6 +44,14 @@ class Text
         return \strtolower(\preg_replace('/(?!^)[[:upper:]]+/', $separator.'$0', $string));
     }
 
+    public static function toSnakeCase($string): string
+    {
+        $string = \preg_replace('#([A-Z\d]+)([A-Z][a-z])#', '\1_\2', self::toCamelCase($string));
+        $string = \preg_replace('#([a-z\d])([A-Z])#', '\1_\2', $string);
+
+        return \strtolower(\str_replace('-', '_', $string));
+    }
+
     public static function cleanText($text): string
     {
         return \html_entity_decode(self::oneSpace(\str_replace(' ?', '', \mb_convert_encoding(\strip_tags($text), 'UTF-8', 'UTF-8'))));
