@@ -1,9 +1,9 @@
 services:
     kode_cms_kode.script.service.mobile_detect:
-        class: Mobile_Detect
+        class: '%kode_cms_kode.script.service.mobile_detect.class%'
 
     kode_cms_kode.script.twig.mobile_extension:
-        class: KodeCms\KodeBundle\Core\Twig\MobileExtension
+        class: '%kode_cms_kode.script.twig.mobile_extension.class%'
         public: false
         arguments:
             - '%kode_cms_kode.core.short_functions%'
@@ -12,7 +12,7 @@ services:
                 name: twig.extension
 
     kode_cms_kode.script.twig.country_extension:
-        class: KodeCms\KodeBundle\Core\Twig\CountryExtension
+        class: '%kode_cms_kode.script.twig.country_extension.class%'
         public: false
         arguments:
             - '@request_stack'

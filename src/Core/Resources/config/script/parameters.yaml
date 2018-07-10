@@ -1,0 +1,4 @@
+parameters:
+    kode_cms_kode.script.twig.mobile_extension.class: KodeCms\KodeBundle\Core\Twig\MobileExtension
+    kode_cms_kode.script.twig.country_extension.class: KodeCms\KodeBundle\Core\Twig\CountryExtension
+    kode_cms_kode.script.service.mobile_detect.class: Mobile_Detect
